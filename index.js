@@ -43,11 +43,15 @@ app.get('/tasks/:id', (req, res) => {
 })
 
 app.delete('/tasks/:id', (req, res) => {
-    const id = parseInt(req.params.id, 10)
+  const id = parseInt(req.params.id, 10);
+  const index = tarefas.findIndex((t) => t.id === id);
 
-    const tarefa = tarefas.find((t) => t.id === id)
+  if (index === -1) {
+    return res.status(404).json({ erro: 'Tarefa não encontrada.' });
+  }
 
-    res.status(204).json({ mensagem: 'Tarefa deletada com sucesso'});
+  tarefas.splice(index, 1);
+  res.status(200).json({ mensagem: 'Tarefa removida com sucesso.' });
 })
 
 app.listen(porta, () => {
